@@ -4,16 +4,35 @@
  */
 package com.vivemedellin.gestion_usuarios.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author David
  */
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoginDTO {
     private String apodo;
     private String contraseña;
+
+    public String getApodo() {
+        return apodo;
+    }
+
+    public void setApodo(String apodo) {
+        this.apodo = apodo;
+    }
+
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
+    }
 
     // Getters y setters
 }
