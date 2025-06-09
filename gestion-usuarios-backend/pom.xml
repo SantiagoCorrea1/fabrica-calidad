@@ -28,6 +28,8 @@
 	</scm>
 	<properties>
 		<java.version>24</java.version>
+		<sonar.organization>santiagocorrea1</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -106,7 +108,15 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-                
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>5.11.0</version>
+			<scope>test</scope>
+		</dependency>
+
+
+
 	</dependencies>
 
 	<build>
