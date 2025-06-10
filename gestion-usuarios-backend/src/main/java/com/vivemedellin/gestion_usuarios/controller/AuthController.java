@@ -36,15 +36,16 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private JwtUtil jwtUtil;
-    
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioRepository usuarioRepository;
+    private final JwtUtil jwtUtil;
+    private final UsuarioService usuarioService;
+
+    public AuthController(UsuarioRepository usuarioRepository, JwtUtil jwtUtil, UsuarioService usuarioService) {
+        this.usuarioRepository = usuarioRepository;
+        this.jwtUtil = jwtUtil;
+        this.usuarioService = usuarioService;
+    }
 
     @PostMapping("/google")
     public ResponseEntity<?> autenticarConGoogle(@RequestBody Map<String, String> request) throws IOException {
