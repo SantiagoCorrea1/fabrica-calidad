@@ -11,13 +11,15 @@ package com.vivemedellin.gestion_usuarios.config;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "claveSuperSecreta";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     public String generateToken(String email) {
         return Jwts.builder()
