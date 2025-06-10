@@ -17,20 +17,20 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final String secretKey = "claveSuperSecreta";
+    private static final String SECRET_KEY = "claveSuperSecreta";
 
     public String generateToken(String email) {
         return Jwts.builder()
             .setSubject(email)
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 horas
-            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
             .compact();
     }
 
     public String extractEmail(String token) {
         return Jwts.parser()
-            .setSigningKey(secretKey)
+            .setSigningKey(SECRET_KEY)
             .parseClaimsJws(token)
             .getBody()
             .getSubject();
