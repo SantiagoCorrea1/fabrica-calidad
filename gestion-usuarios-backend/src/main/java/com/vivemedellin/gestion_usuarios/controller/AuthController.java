@@ -96,7 +96,7 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Este usuario debe iniciar sesión con Google");
         }
 
-        if (!new BCryptPasswordEncoder().matches(dto.getContrasena(), usuario.getContraseña())) {
+        if (!new BCryptPasswordEncoder().matches(dto.getContraseña(), usuario.getContraseña())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales inválidas");
         }
 
