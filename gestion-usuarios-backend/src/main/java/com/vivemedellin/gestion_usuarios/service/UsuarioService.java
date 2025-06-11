@@ -16,26 +16,29 @@ import java.util.List;
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private MunicipioRepository municipioRepository;
+    private final MunicipioRepository municipioRepository;
 
-    @Autowired
-    private InteresRepository interesRepository;
+    private final InteresRepository interesRepository;
 
-    @Autowired
-    private InteresXUsuarioRepository interesXUsuarioRepository;
+    private final InteresXUsuarioRepository interesXUsuarioRepository;
 
-    @Autowired
-    private TokenVerificacionRepository tokenVerificacionRepository;
+    private final TokenVerificacionRepository tokenVerificacionRepository;
 
-    @Autowired
-    private CorreoService correoService;
+    private final CorreoService correoService;
 
     private static final List<String> PALABRAS_INAPROPIADAS = List.of("xxx", "puta", "mierda","pendiente");
-    
+
+    public UsuarioService(UsuarioRepository usuarioRepository, MunicipioRepository municipioRepository, InteresRepository interesRepository, InteresXUsuarioRepository interesXUsuarioRepository, TokenVerificacionRepository tokenVerificacionRepository, CorreoService correoService) {
+        this.usuarioRepository = usuarioRepository;
+        this.municipioRepository = municipioRepository;
+        this.interesRepository = interesRepository;
+        this.interesXUsuarioRepository = interesXUsuarioRepository;
+        this.tokenVerificacionRepository = tokenVerificacionRepository;
+        this.correoService = correoService;
+    }
+
     public Usuario autenticarOCrearUsuarioDesdeGoogle(String email) {
         return usuarioRepository.findByCorreoElectronico(email)
                 .orElseGet(() -> {
@@ -45,13 +48,12 @@ public class UsuarioService {
                     nuevoUsuario.setCorreoElectronico(email);
                     nuevoUsuario.setNombre("PENDIENTE");
                     nuevoUsuario.setApellido("PENDIENTE");
-                    nuevoUsuario.setApodo(UUID.randomUUID().toString().substring(0, 8)); // apodo temporal único
-                    nuevoUsuario.setContraseña(encriptarPassword("Pendiente")); // o algún placeholder
-                    nuevoUsuario.setFechaNacimiento(LocalDate.of(1900, 1, 1)); // placeholder válido
+                    nuevoUsuario.setApodo(UUID.randomUUID().toString().substring(0, 8));
+                    nuevoUsuario.setContraseña(encriptarPassword("Pendiente"));
+                    nuevoUsuario.setFechaNacimiento(LocalDate.of(1900, 1, 1));
                     nuevoUsuario.setCorreoVerificado(true);
                     nuevoUsuario.setRegistradoManual(false);
-                    nuevoUsuario.setMunicipio(municipio);// si ya viene verificado por Google
-//                    nuevoUsuario.setRegistradoCon("GOOGLE");
+                    nuevoUsuario.setMunicipio(municipio);
                     return usuarioRepository.save(nuevoUsuario);
                 });
     }   
@@ -106,15 +108,15 @@ public class UsuarioService {
 
         // Asociar interés
         for (Integer idInteres : dto.getIdsIntereses()) {
-    Interes interes = interesRepository.findById(idInteres)
-        .orElseThrow(() -> new IllegalArgumentException("Interés con ID " + idInteres + " no válido"));
+            Interes interes = interesRepository.findById(idInteres)
+                .orElseThrow(() -> new IllegalArgumentException("Interés con ID " + idInteres + " no válido"));
 
-    InteresXUsuario ixu = new InteresXUsuario();
-    ixu.setUsuario(u);
-    ixu.setInteres(interes);
+            InteresXUsuario ixu = new InteresXUsuario();
+            ixu.setUsuario(u);
+            ixu.setInteres(interes);
 
-    interesXUsuarioRepository.save(ixu);
-}
+            interesXUsuarioRepository.save(ixu);
+        }
         String token = UUID.randomUUID().toString();
         TokenVerificacion tv = new TokenVerificacion();
         tv.setToken(token);
@@ -123,7 +125,7 @@ public class UsuarioService {
 
         tokenVerificacionRepository.save(tv);
 
-// Enviar correo
+        // Enviar correo
         String link = "http://localhost:8080/api/usuarios/verificar?token=" + token;
         correoService.enviarCorreoVerificacion(u.getCorreoElectronico(), link);
     }
