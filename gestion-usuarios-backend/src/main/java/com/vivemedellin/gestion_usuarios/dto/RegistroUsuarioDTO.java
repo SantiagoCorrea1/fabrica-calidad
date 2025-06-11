@@ -116,8 +116,7 @@ public class RegistroUsuarioDTO {
         this.contraseña = contraseña;
     }
 
-    public String getConfirmarContraseña() {
-        return confirmarContraseña;
+    public String getConfirmarContraseña() { return confirmarContraseña;
     }
 
     public void setConfirmarContraseña(String confirmarContraseña) {
