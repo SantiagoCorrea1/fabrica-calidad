@@ -21,9 +21,14 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/usuarios") // Esta es la URL base de la API
 public class UsuarioController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
 
     private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
@@ -50,8 +55,8 @@ public class UsuarioController {
 
     @PostMapping("/registro-complementario")
     public ResponseEntity<String> completarRegistro(@RequestBody RegistroComplementarioDTO dto, @RequestParam String email) {
-        System.out.println("DTO recibido: " + dto);
-        Usuario usuario = usuarioRepository.findByCorreoElectronico(email)
+        logger.info("DTO recibido: {}", dto);
+        Usuario usuario = usuarioRepository.findByCor   reoElectronico(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
         actualizarCamposUsuario(dto, usuario);
