@@ -25,24 +25,21 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/api/usuarios") // Esta es la URL base de la API
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService;
-    
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioService usuarioService;
+    private final UsuarioRepository usuarioRepository;
+    private final MunicipioRepository municipioRepository;
+    private final InteresRepository interesRepository;
+    private final InteresXUsuarioRepository interesXUsuarioRepository;
+    private final TokenVerificacionRepository tokenVerificacionRepository;
 
-    @Autowired
-    private MunicipioRepository municipioRepository;
-
-    @Autowired
-    private InteresRepository interesRepository;
-
-    @Autowired
-    private InteresXUsuarioRepository interesXUsuarioRepository;
-
-    @Autowired
-    private TokenVerificacionRepository tokenVerificacionRepository;
-    
+    public UsuarioController(UsuarioService usuarioService, UsuarioRepository usuarioRepository, MunicipioRepository municipioRepository, InteresRepository interesRepository,InteresXUsuarioRepository interesXUsuarioRepository, TokenVerificacionRepository tokenVerificacionRepository){
+        this.usuarioService = usuarioService;
+        this.usuarioRepository = usuarioRepository;
+        this.municipioRepository = municipioRepository;
+        this.interesRepository = interesRepository;
+        this.interesXUsuarioRepository = interesXUsuarioRepository;
+        this.tokenVerificacionRepository = tokenVerificacionRepository;
+    }
     @PostMapping("/registrar")
     public ResponseEntity<String> registrarUsuario(@RequestBody @Valid RegistroUsuarioDTO dto) {
         usuarioService.registrarUsuario(dto);
