@@ -10,7 +10,6 @@ import com.vivemedellin.gestion_usuarios.dto.RegistroUsuarioDTO;
 import com.vivemedellin.gestion_usuarios.entity.*;
 import com.vivemedellin.gestion_usuarios.repository.*;
 import com.vivemedellin.gestion_usuarios.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

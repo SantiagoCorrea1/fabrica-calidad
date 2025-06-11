@@ -20,7 +20,6 @@ import java.util.Optional;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -63,7 +62,9 @@ public class AuthController {
         }
 
         GoogleIdToken.Payload payload = payloadOptional.get();
-        logger.info("Payload: {}", payload.toPrettyString());
+        if (logger.isInfoEnabled()) {
+            logger.info("Payload: {}", payload.toPrettyString());
+        }
 
         String email = payload.getEmail();
         Usuario usuario = usuarioService.autenticarOCrearUsuarioDesdeGoogle(email);
@@ -82,7 +83,7 @@ public class AuthController {
             GoogleIdToken idToken = verifier.verify(idTokenString);
             return Optional.ofNullable(idToken != null ? idToken.getPayload() : null);
 
-        } catch (Exception e) {
+        } catch (Exception exception) {
             return Optional.empty();
         }
     }
