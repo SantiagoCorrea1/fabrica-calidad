@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  *
  * @author David
@@ -36,6 +38,8 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     private final UsuarioRepository usuarioRepository;
     private final JwtUtil jwtUtil;
@@ -56,9 +60,9 @@ public class AuthController {
         if (payload == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
         }
-        System.out.println("Payload: " + payload.toPrettyString());
+        logger.info("Payload: {}", payload.toPrettyString());
+        
         String email = payload.getEmail();
-
         Usuario usuario = usuarioService.autenticarOCrearUsuarioDesdeGoogle(email);
         return ResponseEntity.ok(usuario);
     }
