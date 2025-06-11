@@ -61,7 +61,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
         }
         logger.info("Payload: {}", payload.toPrettyString());
-        
+
         String email = payload.getEmail();
         Usuario usuario = usuarioService.autenticarOCrearUsuarioDesdeGoogle(email);
         return ResponseEntity.ok(usuario);
@@ -78,7 +78,7 @@ public class AuthController {
             GoogleIdToken idToken = verifier.verify(idTokenString);
             return (idToken != null) ? idToken.getPayload() : null;
 
-        } catch (Exception e) {
+        } catch (Exception _) {
             return null;
         }
     }
