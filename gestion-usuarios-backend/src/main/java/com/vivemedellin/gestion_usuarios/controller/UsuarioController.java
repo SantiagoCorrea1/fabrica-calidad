@@ -49,7 +49,7 @@ public class UsuarioController {
     private static final List<String> PALABRAS_INAPROPIADAS = List.of("xxx", "puta", "mierda","pendiente");
 
     @PostMapping("/registro-complementario")
-    public ResponseEntity<?> completarRegistro(@RequestBody RegistroComplementarioDTO dto, @RequestParam String email) {
+    public ResponseEntity<String> completarRegistro(@RequestBody RegistroComplementarioDTO dto, @RequestParam String email) {
         System.out.println("DTO recibido: " + dto);
         Usuario usuario = usuarioRepository.findByCorreoElectronico(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
