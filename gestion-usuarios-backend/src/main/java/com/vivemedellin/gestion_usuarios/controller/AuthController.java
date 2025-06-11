@@ -83,7 +83,7 @@ public class AuthController {
             GoogleIdToken idToken = verifier.verify(idTokenString);
             return Optional.ofNullable(idToken != null ? idToken.getPayload() : null);
 
-        } catch (Exception _) {
+        } catch (Exception exception) {
             return Optional.empty();
         }
     }
