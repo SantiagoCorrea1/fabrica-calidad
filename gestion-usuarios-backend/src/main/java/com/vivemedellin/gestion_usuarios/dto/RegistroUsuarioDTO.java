@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
@@ -117,8 +116,7 @@ public class RegistroUsuarioDTO {
         this.contraseña = contraseña;
     }
 
-    public String getConfirmarContraseña() {
-        return confirmarContraseña;
+    public String getConfirmarContraseña() { return confirmarContraseña;
     }
 
     public void setConfirmarContraseña(String confirmarContraseña) {

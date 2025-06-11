@@ -15,7 +15,6 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -33,6 +32,11 @@ public class Municipio {
     @Column(name = "nombre_municipio")
     private String nombre;
 
+    // Relación con Usuario
+    @OneToMany(mappedBy = "municipio")
+    @JsonIgnore
+    private List<Usuario> usuarios;
+
     public Integer getId() {
         return id;
     }
@@ -49,4 +53,11 @@ public class Municipio {
         this.nombre = nombre;
     }
 
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
 }
