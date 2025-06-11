@@ -56,7 +56,7 @@ public class UsuarioController {
     @PostMapping("/registro-complementario")
     public ResponseEntity<String> completarRegistro(@RequestBody RegistroComplementarioDTO dto, @RequestParam String email) {
         logger.info("DTO recibido: {}", dto);
-        Usuario usuario = usuarioRepository.findByCor   reoElectronico(email)
+        Usuario usuario = usuarioRepository.findByCorreoElectronico(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
         actualizarCamposUsuario(dto, usuario);

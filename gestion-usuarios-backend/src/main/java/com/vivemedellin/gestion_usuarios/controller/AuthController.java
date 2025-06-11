@@ -16,6 +16,7 @@ import com.vivemedellin.gestion_usuarios.service.UsuarioService;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -81,7 +82,7 @@ public class AuthController {
             GoogleIdToken idToken = verifier.verify(idTokenString);
             return Optional.ofNullable(idToken != null ? idToken.getPayload() : null);
 
-        } catch (Exception _) {
+        } catch (Exception e) {
             return Optional.empty();
         }
     }
@@ -95,7 +96,7 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Este usuario debe iniciar sesión con Google");
         }
 
-        if (!new BCryptPasswordEncoder().matches(dto.getContraseña(), usuario.getContraseña())) {
+        if (!new BCryptPasswordEncoder().matches(dto.getContrasena(), usuario.getContraseña())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales inválidas");
         }
 

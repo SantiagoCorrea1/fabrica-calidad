@@ -19,7 +19,7 @@ import java.util.Date;
 public class JwtUtil {
 
     @Value("${jwt.secret}")
-    private String secretKey;
+    private String SECRET_KEY;
 
     public String generateToken(String email) {
         return Jwts.builder()
