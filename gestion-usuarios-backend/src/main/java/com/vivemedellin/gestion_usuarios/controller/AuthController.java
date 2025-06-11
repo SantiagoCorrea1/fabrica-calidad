@@ -48,7 +48,7 @@ public class AuthController {
     }
 
     @PostMapping("/google")
-    public ResponseEntity<?> autenticarConGoogle(@RequestBody Map<String, String> request) throws IOException {
+    public ResponseEntity<Object> autenticarConGoogle(@RequestBody Map<String, String> request) throws IOException {
         String idToken = request.get("idToken");
 
         GoogleIdToken.Payload payload = verificarTokenGoogle(idToken);
@@ -80,7 +80,7 @@ public class AuthController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO dto) {
         Usuario usuario = usuarioRepository.findByApodo(dto.getApodo())
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales inválidas"));
 
@@ -98,7 +98,7 @@ public class AuthController {
     }
 
         @PostMapping("/logout")
-        public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
             // No se puede invalidar un JWT sin mantener estado,
             // pero puedes devolver un mensaje para que el frontend elimine el token.
             return ResponseEntity.ok("Logout exitoso. Token eliminado del cliente.");
