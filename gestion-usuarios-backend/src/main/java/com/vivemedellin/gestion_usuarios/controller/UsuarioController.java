@@ -47,67 +47,71 @@ public class UsuarioController {
     }
     
     private static final List<String> PALABRAS_INAPROPIADAS = List.of("xxx", "puta", "mierda","pendiente");
-    
+
     @PostMapping("/registro-complementario")
     public ResponseEntity<?> completarRegistro(@RequestBody RegistroComplementarioDTO dto, @RequestParam String email) {
         System.out.println("DTO recibido: " + dto);
         Usuario usuario = usuarioRepository.findByCorreoElectronico(email)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-        
-        if (dto.getApodo() != null) {
-            if (usuarioRepository.existsByApodo(dto.getApodo())) {
-            throw new IllegalArgumentException("El apodo ya está en uso.");
-            }
-            for (String palabra : PALABRAS_INAPROPIADAS) {
-                if (dto.getApodo().toLowerCase().contains(palabra)) {
-                throw new IllegalArgumentException("El apodo contiene palabras inapropiadas.");
-                }
-            }
-            usuario.setApodo(dto.getApodo());
-        }
-        if (dto.getNombre() != null && !dto.getNombre().isBlank()) {
-            usuario.setNombre(dto.getNombre());
-        }
-        if (dto.getSegundoNombre() != null) {
-            usuario.setSegundoNombre(dto.getSegundoNombre());
-        }
-        if (dto.getApellido() != null) {
-            usuario.setApellido(dto.getApellido());
-        }
-        if (dto.getSegundoApellido() != null) {
-            usuario.setSegundoApellido(dto.getSegundoApellido());
-        }
-        if (dto.getTelefono() != null) {
-            usuario.setTelefono(dto.getTelefono());
-        }
-        if (dto.getFotoPerfil() != null) {
-            usuario.setFotoPerfil(dto.getFotoPerfil());
-        }
-        if (dto.getBiografia() != null) {
-            usuario.setBiografia(dto.getBiografia());
-        }
-        if (dto.getFechaNacimiento() != null) {
-            usuario.setFechaNacimiento(dto.getFechaNacimiento());
-        }
-        if (dto.getIdMunicipio() != null) {
-            Municipio municipio = municipioRepository.findById(dto.getIdMunicipio())
-                .orElseThrow(() -> new IllegalArgumentException("Municipio no válido"));
-            usuario.setMunicipio(municipio);
-        }
-        usuarioRepository.save(usuario);
-        if (dto.getIdsIntereses() != null && !dto.getIdsIntereses().isEmpty()) {
-            for (Integer idInteres : dto.getIdsIntereses()) {
-                Interes interes = interesRepository.findById(idInteres)
-                    .orElseThrow(() -> new IllegalArgumentException("Interés con ID " + idInteres + " no válido"));
-                InteresXUsuario ixu = new InteresXUsuario();
-                ixu.setUsuario(usuario);
-                ixu.setInteres(interes);
-                interesXUsuarioRepository.save(ixu);
-            }
-        }
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
+        actualizarCamposUsuario(dto, usuario);
+        usuarioRepository.save(usuario);
+        guardarIntereses(dto, usuario);
 
         return ResponseEntity.ok("Registro completado correctamente");
+    }
+
+    private void actualizarCamposUsuario(RegistroComplementarioDTO dto, Usuario usuario) {
+        validarYAsignarApodo(dto.getApodo(), usuario);
+
+        if (esNoVacio(dto.getNombre())) usuario.setNombre(dto.getNombre());
+        if (dto.getSegundoNombre() != null) usuario.setSegundoNombre(dto.getSegundoNombre());
+        if (dto.getApellido() != null) usuario.setApellido(dto.getApellido());
+        if (dto.getSegundoApellido() != null) usuario.setSegundoApellido(dto.getSegundoApellido());
+        if (dto.getTelefono() != null) usuario.setTelefono(dto.getTelefono());
+        if (dto.getFotoPerfil() != null) usuario.setFotoPerfil(dto.getFotoPerfil());
+        if (dto.getBiografia() != null) usuario.setBiografia(dto.getBiografia());
+        if (dto.getFechaNacimiento() != null) usuario.setFechaNacimiento(dto.getFechaNacimiento());
+
+        if (dto.getIdMunicipio() != null) {
+            Municipio municipio = municipioRepository.findById(dto.getIdMunicipio())
+                    .orElseThrow(() -> new IllegalArgumentException("Municipio no válido"));
+            usuario.setMunicipio(municipio);
+        }
+    }
+
+    private void validarYAsignarApodo(String apodo, Usuario usuario) {
+        if (apodo == null) return;
+
+        if (usuarioRepository.existsByApodo(apodo)) {
+            throw new IllegalArgumentException("El apodo ya está en uso.");
+        }
+
+        for (String palabra : PALABRAS_INAPROPIADAS) {
+            if (apodo.toLowerCase().contains(palabra)) {
+                throw new IllegalArgumentException("El apodo contiene palabras inapropiadas.");
+            }
+        }
+
+        usuario.setApodo(apodo);
+    }
+
+    private void guardarIntereses(RegistroComplementarioDTO dto, Usuario usuario) {
+        if (dto.getIdsIntereses() == null || dto.getIdsIntereses().isEmpty()) return;
+
+        for (Integer idInteres : dto.getIdsIntereses()) {
+            Interes interes = interesRepository.findById(idInteres)
+                    .orElseThrow(() -> new IllegalArgumentException("Interés con ID " + idInteres + " no válido"));
+
+            InteresXUsuario ixu = new InteresXUsuario();
+            ixu.setUsuario(usuario);
+            ixu.setInteres(interes);
+            interesXUsuarioRepository.save(ixu);
+        }
+    }
+
+    private boolean esNoVacio(String valor) {
+        return valor != null && !valor.isBlank();
     }
 
     @GetMapping("/verificar")
