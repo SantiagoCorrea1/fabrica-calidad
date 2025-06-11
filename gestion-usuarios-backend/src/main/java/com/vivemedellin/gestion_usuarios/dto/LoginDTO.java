@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginDTO {
     private String apodo;
-    private String contraseña;
+    private String contrasena;
 
     public String getApodo() {
         return apodo;
@@ -25,12 +25,12 @@ public class LoginDTO {
         this.apodo = apodo;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     // Getters y setters
