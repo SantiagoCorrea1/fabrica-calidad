@@ -55,19 +55,22 @@ public class AuthController {
     public ResponseEntity<Object> autenticarConGoogle(@RequestBody Map<String, String> request) throws IOException {
         String idToken = request.get("idToken");
 
-        GoogleIdToken.Payload payload = verificarTokenGoogle(idToken);
+        Optional<GoogleIdToken.Payload> payloadOptional = verificarTokenGoogle(idToken);
 
-        if (payload == null) {
+        if (payloadOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
         }
+
+        GoogleIdToken.Payload payload = payloadOptional.get();
         logger.info("Payload: {}", payload.toPrettyString());
 
         String email = payload.getEmail();
         Usuario usuario = usuarioService.autenticarOCrearUsuarioDesdeGoogle(email);
         return ResponseEntity.ok(usuario);
+
     }
     
-    private GoogleIdToken.Payload verificarTokenGoogle(String idTokenString) {
+    private Optional<GoogleIdToken.Payload> verificarTokenGoogle(String idTokenString) {
         try {
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
                     new NetHttpTransport(),
@@ -76,10 +79,10 @@ public class AuthController {
                     .build();
 
             GoogleIdToken idToken = verifier.verify(idTokenString);
-            return (idToken != null) ? idToken.getPayload() : null;
+            return Optional.ofNullable(idToken != null ? idToken.getPayload() : null);
 
         } catch (Exception _) {
-            return null;
+            return Optional.empty();
         }
     }
     
