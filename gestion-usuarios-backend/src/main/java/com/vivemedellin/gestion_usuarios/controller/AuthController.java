@@ -63,7 +63,9 @@ public class AuthController {
         }
 
         GoogleIdToken.Payload payload = payloadOptional.get();
-        logger.info("Payload: {}", payload.toPrettyString());
+        if (logger.isInfoEnabled()) {
+            logger.info("Payload: {}", payload.toPrettyString());
+        }
 
         String email = payload.getEmail();
         Usuario usuario = usuarioService.autenticarOCrearUsuarioDesdeGoogle(email);
