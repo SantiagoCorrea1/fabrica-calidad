@@ -16,23 +16,22 @@ import java.util.List;
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private MunicipioRepository municipioRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final MunicipioRepository municipioRepository;
+    private final InteresRepository interesRepository;
+    private final InteresXUsuarioRepository interesXUsuarioRepository;
+    private final TokenVerificacionRepository tokenVerificacionRepository;
+    private final CorreoService correoService;
 
-    @Autowired
-    private InteresRepository interesRepository;
-
-    @Autowired
-    private InteresXUsuarioRepository interesXUsuarioRepository;
-
-    @Autowired
-    private TokenVerificacionRepository tokenVerificacionRepository;
-
-    @Autowired
-    private CorreoService correoService;
+    private UsuarioService(UsuarioRepository usuarioRepository, MunicipioRepository municipioRepository, InteresRepository interesRepository, InteresXUsuarioRepository interesXUsuarioRepository, TokenVerificacionRepository tokenVerificacionRepository, CorreoService correoService){
+        this.usuarioRepository = usuarioRepository;
+        this.municipioRepository = municipioRepository;
+        this.interesRepository = interesRepository;
+        this.interesXUsuarioRepository = interesXUsuarioRepository;
+        this.tokenVerificacionRepository = tokenVerificacionRepository;
+        this.correoService = correoService;
+    }
 
     private static final List<String> PALABRAS_INAPROPIADAS = List.of("xxx", "puta", "mierda","pendiente");
     
