@@ -5,7 +5,6 @@
 package com.vivemedellin.gestion_usuarios.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
